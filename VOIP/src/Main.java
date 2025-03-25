@@ -3,7 +3,6 @@ import de.maxhenkel.opus4j.OpusEncoder;
 import de.maxhenkel.opus4j.UnknownPlatformException;
 
 import javax.sound.sampled.*;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -24,8 +23,6 @@ public class Main {
         int streamLen = 960;
         OpusEncoder encoder = new OpusEncoder(48000, 1, OpusEncoder.Application.VOIP);
         encoder.setMaxPayloadSize(960);
-        //encoder.resetState();
-        //encoder.close();
 
         OpusDecoder decoder = new OpusDecoder(48000, 1);
         decoder.setFrameSize(960);
@@ -42,6 +39,7 @@ public class Main {
         mic.open();
         int drop_count = 0;
         short[] decompressed;
+
 
         try {
 
@@ -60,6 +58,7 @@ public class Main {
         }catch (Exception e){
             System.out.println("UH OH");
         }
+
     }
 
     public static class AudioPlayer {
