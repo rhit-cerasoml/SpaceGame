@@ -1,52 +1,35 @@
-import de.maxhenkel.opus4j.OpusDecoder;
 import de.maxhenkel.opus4j.OpusEncoder;
 import de.maxhenkel.opus4j.UnknownPlatformException;
-
 import javax.sound.sampled.*;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.Random;
-
-import java.io.InputStream;
 import java.io.OutputStream;
 
 
 public class Main {
 
+    public static final int SAMPLE_RATE = 48000; // 48000
+    public static final int FRAME_SIZE = 960;
     static int port = 9000;
-
-
     public static void main(String[] args) throws IOException, UnknownPlatformException, LineUnavailableException {
-        int streamLen = 960;
-        OpusEncoder encoder = new OpusEncoder(48000, 1, OpusEncoder.Application.VOIP);
-        encoder.setMaxPayloadSize(960);
-
-        OpusDecoder decoder = new OpusDecoder(48000, 1);
-        decoder.setFrameSize(960);
+        int streamLen = FRAME_SIZE;
+        OpusEncoder encoder = new OpusEncoder(SAMPLE_RATE, 1, OpusEncoder.Application.VOIP);
+        encoder.setMaxPayloadSize(streamLen);
 
         ServerSocket socket = new ServerSocket(port);
         Socket client = socket.accept();
         OutputStream out = null;
         out = client.getOutputStream();
 
-
-
         MicrophoneHandler mic = new MicrophoneHandler();
-        AudioPlayer player = new AudioPlayer();
         mic.open();
-        int drop_count = 0;
-        short[] decompressed;
-
 
         try {
 
             while(true) {
-                short[] data = mic.getAudioSample(960);
+                short[] data = mic.getAudioSample(streamLen);
                 byte[] compressed = encoder.encode(data);
-                short[] decoded = decoder.decode(compressed);
                 //player.playAudio(decoded);
                 byte[] buf = Util.writeInt(compressed.length);
 
@@ -56,9 +39,9 @@ public class Main {
             }
 
         }catch (Exception e){
+            e.printStackTrace();
             System.out.println("UH OH");
         }
-
     }
 
     public static class AudioPlayer {
@@ -68,7 +51,7 @@ public class Main {
 
         public AudioPlayer() throws LineUnavailableException {
             // Set up audio format (should match the recording format)
-            format = new AudioFormat(48000, 16, 1, true, false);
+            format = new AudioFormat(SAMPLE_RATE, 16, 1, true, false);
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
             line = (SourceDataLine) AudioSystem.getLine(info);
             line.open(format);
@@ -95,6 +78,4 @@ public class Main {
             }
         }
     }
-
-
 }

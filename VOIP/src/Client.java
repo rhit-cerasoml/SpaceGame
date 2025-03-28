@@ -20,14 +20,13 @@ public class Client {
     //static String serverIP = "25.3.220.57";
     static String serverIP = "127.0.0.1";
     static int port = 9000;
-
     public static void main(String[] args) throws IOException, UnknownPlatformException, LineUnavailableException {
 
         //byte[] encoded = encoder.encode(rawAudio);
 
 
-        OpusDecoder decoder = new OpusDecoder(48000, 1);
-        decoder.setFrameSize(960);
+        OpusDecoder decoder = new OpusDecoder(Main.SAMPLE_RATE, 1);
+        decoder.setFrameSize(Main.FRAME_SIZE);
         //short[] decoded = decoder.decode(encoded);
 
 
@@ -59,6 +58,7 @@ public class Client {
                 }
             }
         }catch (Exception e){
+            e.printStackTrace();
             System.out.println("UH OH");
         }
     }

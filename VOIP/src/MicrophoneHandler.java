@@ -9,7 +9,7 @@ public class MicrophoneHandler {
 
     public MicrophoneHandler() {
         // Set up audio format (e.g., 16-bit mono at 44.1 kHz)
-        format = new AudioFormat(44100, 16, 1, true, false);
+        format = new AudioFormat(48000, 16, 1, true, false);
         info = new DataLine.Info(TargetDataLine.class, format);
     }
 
