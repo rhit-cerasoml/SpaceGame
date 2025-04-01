@@ -3,6 +3,7 @@ package test;
 //import the OpenGL classes, Buffer utilities, and GLFW classes
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLUtil;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -140,11 +141,20 @@ public class Test2 {
         //unbind the currently bound VAO
         glBindVertexArray(0);
 
+
+
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // before creating the window
+        GLUtil.setupDebugMessageCallback();
+
         //load the vertex shader from the file using a method I wrote down below
         int vertexShader = loadShader(new File("src/main/resources/vert.glsl"), GL_VERTEX_SHADER);
 
+        System.out.println("-----------------");
+
         //load the fragment shader from the file using a method I wrote down below
         int fragmentShader = loadShader(new File("src/main/resources/frag.glsl"), GL_FRAGMENT_SHADER);
+
+
 
         //create a program object and store its ID in the 'program' variable
         int program = glCreateProgram();
@@ -176,23 +186,29 @@ public class Test2 {
             error = glGetError();
             System.exit(1);
         }
-        System.out.println("Shaders compiled successfully");
 
         //sets the background clear color to white
         glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
         //get the 'colorMod and 'positionMod' variables so I can change them while drawing to create the animation
-        int colorMod = glGetUniformLocation(program, "colorMod");
-        int positionMod = glGetUniformLocation(program, "positionMod");
         float i = 0.0f;
 
         //set the current program
         glUseProgram(program);
 
+        error = glGetError();
+        if(error != 0) {
+            System.out.println("OpenGL Error: " + error);
+            error = glGetError();
+            System.exit(-1);
+        }
+
         while(!glfwWindowShouldClose(window)) {
 
             //clear the window
             glClear(GL_COLOR_BUFFER_BIT);
+
+            glUseProgram(program);
 
             //set the current vao to the one we made earlier with all of the data
             glBindVertexArray(vao);
@@ -201,13 +217,19 @@ public class Test2 {
             glDrawElements(GL_TRIANGLES, index.length, GL_UNSIGNED_INT, 0);
 
             //unbind the vao if there's another one that will be used, just to get rid of any conflicts
-            glBindVertexArray(0);
+            //glBindVertexArray(0);
 
             //swap the frame to show the rendered image
             glfwSwapBuffers(window);
 
             //poll for window events (resize, close, button presses, etc.)
             glfwPollEvents();
+
+            error = glGetError();
+            if(error != 0) {
+                System.out.println("OpenGL Error: " + error);
+                error = glGetError();
+            }
         }
 
         System.out.println("Window closed");

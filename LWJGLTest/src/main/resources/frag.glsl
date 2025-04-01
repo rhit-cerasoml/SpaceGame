@@ -3,10 +3,9 @@
 //use the outColor variable from the vertex shader as the input to the fragment shader
 in vec3 outColor;
 
-//the built in pixel color variable
-out vec4 gl_FragColor;
+layout(location = 0) out vec4 fragColor;
 
-void main(void) {
+void main() {
     // Pass through our original color with full opacity.
-    gl_FragColor = vec4(outColor.r, outColor.g, outColor.b, 1.0);
+    fragColor = vec4(outColor.xyz, 1.0);
 }
