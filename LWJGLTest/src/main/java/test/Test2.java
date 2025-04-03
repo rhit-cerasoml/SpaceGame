@@ -43,10 +43,19 @@ public class Test2 {
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 
         //turn on window resizing
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+        //removes top close bar
+        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+        
+        //maximizes window
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
 
         //create a GLFW window and store its id in the window variable
-        window = glfwCreateWindow(screenWidth, screenHeight, "GLFW OpenGL Window", glfwGetPrimaryMonitor(), 0);
+        window = glfwCreateWindow(screenWidth, screenHeight, "GLFW OpenGL Window", 0, 0);
+
+        
+
 
         //enables opengl
         glfwMakeContextCurrent(window);
