@@ -54,8 +54,6 @@ public class Test2 {
         //create a GLFW window and store its id in the window variable
         window = glfwCreateWindow(screenWidth, screenHeight, "GLFW OpenGL Window", 0, 0);
 
-        
-
 
         //enables opengl
         glfwMakeContextCurrent(window);
@@ -68,6 +66,10 @@ public class Test2 {
 
         //show the window
         glfwShowWindow(window);
+
+
+
+
 
         //the vertex data (x and y)
         double[] triangle = {
@@ -113,7 +115,6 @@ public class Test2 {
 
         glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
 
-
         //specifies information about the format of the VBO (number of values per vertex, data type, etc.)
         glVertexAttribPointer(0, 2, GL_DOUBLE, false, 0, 0);
 
@@ -149,6 +150,12 @@ public class Test2 {
 
         //unbind the currently bound VAO
         glBindVertexArray(0);
+
+
+
+        int tid = Texture.loadTexture("image.png");
+
+        //glBindTexture(0, tid);
 
 
 
@@ -227,6 +234,7 @@ public class Test2 {
 
             //unbind the vao if there's another one that will be used, just to get rid of any conflicts
             //glBindVertexArray(0);
+            glActiveTexture(GL_TEXTURE0);
 
             //swap the frame to show the rendered image
             glfwSwapBuffers(window);
