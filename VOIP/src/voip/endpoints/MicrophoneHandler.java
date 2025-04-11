@@ -1,6 +1,10 @@
+package voip.endpoints;
+
+import voip.interfaces.AudioSource;
+
 import javax.sound.sampled.*;
 
-public class MicrophoneHandler {
+public class MicrophoneHandler implements AudioSource {
 
     private TargetDataLine line;
     private AudioFormat format;

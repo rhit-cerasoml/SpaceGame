@@ -13,6 +13,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -29,7 +30,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/Max Cerasoli/Desktop/SpaceGame/QuadTreeTests",
+    "last_opened_file_path": "C:/Users/Max Cerasoli/Desktop/SpaceGame/VOIP",
     "project.structure.last.edited": "Global Libraries",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.2"
@@ -47,14 +48,14 @@
   </component>
   <component name="RunManager" selected="Application.Client">
     <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Client" />
+      <option name="MAIN_CLASS_NAME" value="example.Client" />
       <module name="VOIP" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
+      <option name="MAIN_CLASS_NAME" value="example.Main" />
       <module name="VOIP" />
       <method v="2">
         <option name="Make" enabled="true" />

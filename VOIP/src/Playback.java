@@ -1,15 +1,15 @@
 import de.maxhenkel.opus4j.OpusDecoder;
 import de.maxhenkel.opus4j.UnknownPlatformException;
+import voip.endpoints.AudioPlayer;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Playback {
-    public static Main.AudioPlayer player;
+    public static AudioPlayer player;
     public static void main(String[] args) throws IOException, LineUnavailableException, UnknownPlatformException {
-        player = new Main.AudioPlayer();
+        player = new AudioPlayer();
         OpusDecoder decoder = new OpusDecoder(48000, 1);
         decoder.setFrameSize(960);
         try(FileInputStream fis = new FileInputStream("src.bin")) {
@@ -28,7 +28,7 @@ public class Playback {
                         if (packet[i] != p2[i]) System.out.println(pnum + ": " + i + " - " + packet[i] + "/" + p2[i]);
                     }
                     System.out.println("------end of p" + pnum + "--------");
-                    player.playAudio(decoder.decode(packet));
+                    player.sendAudio(decoder.decode(packet));
                     pnum++;
                 }
             }
