@@ -5,6 +5,7 @@ import java.net.Socket;
 import voip.AudioConnection;
 import voip.endpoints.AudioPlayer;
 import voip.endpoints.AudioReceiver;
+import voip.endpoints.AudioTransmitter;
 import voip.endpoints.MicrophoneHandler;
 
 public class EndpointsClient {
@@ -22,10 +23,14 @@ public class EndpointsClient {
             Socket socket = new Socket(serverIP, port);
 
             AudioReceiver audioReceiver = new AudioReceiver(socket);
-            
-            AudioConnection connection = new AudioConnection(audioReceiver, player);
+            AudioTransmitter audioTransmitter = new AudioTransmitter(socket);
 
-            while(true){}
+
+            AudioConnection connectionOut = new AudioConnection(mic, audioTransmitter);
+            AudioConnection connectionIn = new AudioConnection(audioReceiver, player);
+
+            while(connectionIn.isAlive() || connectionOut.isAlive()){}
+            socket.close();
 
         }catch (Exception e){
             e.printStackTrace();
