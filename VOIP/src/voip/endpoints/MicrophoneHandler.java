@@ -1,5 +1,6 @@
 package voip.endpoints;
 
+import voip.constants.AudioConstants;
 import voip.interfaces.AudioSource;
 
 import javax.sound.sampled.*;
@@ -11,14 +12,10 @@ public class MicrophoneHandler implements AudioSource {
     private DataLine.Info info;
     private byte[] audioBuffer;
 
-    public MicrophoneHandler() {
+    public MicrophoneHandler() throws LineUnavailableException {
         // Set up audio format (e.g., 16-bit mono at 44.1 kHz)
-        format = new AudioFormat(48000, 16, 1, true, false);
+        format = new AudioFormat(AudioConstants.SAMPLE_RATE, 16, 1, true, false);
         info = new DataLine.Info(TargetDataLine.class, format);
-    }
-
-    public void open() throws LineUnavailableException {
-        // Open the line to capture the audio
         line = (TargetDataLine) AudioSystem.getLine(info);
         line.open(format);
         line.start();

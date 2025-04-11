@@ -26,7 +26,6 @@ public class Main {
         out = client.getOutputStream();
 
         MicrophoneHandler mic = new MicrophoneHandler();
-        mic.open();
 
         try {
 

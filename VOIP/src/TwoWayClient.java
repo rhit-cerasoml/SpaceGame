@@ -41,7 +41,6 @@ public class TwoWayClient {
 
         AudioPlayer player = new AudioPlayer();
         MicrophoneHandler mic = new MicrophoneHandler();
-        mic.open();
 
 
         int drop_count = 0;
