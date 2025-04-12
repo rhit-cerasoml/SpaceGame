@@ -69,14 +69,21 @@ public class EndpointsRelay {
 
         @Override
         public void run() {
+            
             while(true){
-                for(int i = 0; i < clients.size(); i ++){
-                    try {
-                        this.clients.get(i).audioTransmitter.sendAudio(this.audioReceiver.getAudioSample(AudioConstants.FRAME_SIZE));
-                    } catch (ChannelClosedException e) {
-                        throw new RuntimeException(e);
+                try {
+                    short[] audio = this.audioReceiver.getAudioSample(AudioConstants.FRAME_SIZE);
+                    for(int i = 0; i < clients.size(); i ++){
+                        try {
+                            this.clients.get(i).audioTransmitter.sendAudio(audio);
+                        } catch (ChannelClosedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
+                } catch (ChannelClosedException e) {
+                    throw new RuntimeException(e);
                 }
+                
             }
         }
 
