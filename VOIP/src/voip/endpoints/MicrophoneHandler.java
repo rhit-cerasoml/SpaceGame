@@ -22,7 +22,7 @@ public class MicrophoneHandler implements AudioSource {
     }
 
     public short[] getAudioSample(int bufferSize){
-        audioBuffer = new byte[bufferSize];
+        audioBuffer = new byte[bufferSize * 2];
 
         // Continuously read from the microphone into the audio buffer
         int bytesRead = line.read(audioBuffer, 0, audioBuffer.length);
