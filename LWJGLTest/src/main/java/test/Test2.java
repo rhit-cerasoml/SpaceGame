@@ -155,7 +155,8 @@ public class Test2 {
 
         int tid = Texture.loadTexture("image.png");
 
-        //glBindTexture(0, tid);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, tid);
 
 
 
