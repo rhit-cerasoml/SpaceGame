@@ -17,8 +17,7 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL20.glValidateProgram;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
@@ -104,89 +103,26 @@ public class HelloWorld {
             0,
             1,
             2,
+            0,
+            3,
+            2
     };
 
     //the vertex data (x and y)
     double[] triangle = {
-            0.0,	 0.5, //first x and y
-            -0.5,	-0.5, //second x and y
-            0.5,	-0.5, //third x and y
+            -1.0,	 1.0, //first x and y
+            -1.0,	-1.0, //second x and y
+            1.0,	-1.0, //third x and y
+            1.0,     1.0
     };
 
     //the color data (red, green, and blue)
     double[] color = {
-            0.0, 1.0, 0.0, //first vertex color
-            1.0, 0.0, 0.0, //second vertex color
-            0.0, 0.0, 1.0, //third vertex color
+            0.0, 0.0, 0.0, //first vertex color
+            0.0, 1.0, 0.0, //second vertex color
+            1.0, 1.0, 1.0, //third vertex color
+            1.0, 0.0, 1.0, //third vertex color
     };
-
-    ByteBuffer vertices;
-    ByteBuffer colors;
-    ByteBuffer indices;
-    private void initBuffers(){
-
-
-
-        //convert the vertex data arrays into ByteBuffers using a method I created down below
-        vertices = Util.storeArrayInBuffer(triangle);
-        colors = Util.storeArrayInBuffer(color);
-        indices = Util.storeArrayInBuffer(index);
-
-        //VAO: stores pointers to all of the vbos to keep 'em organized
-        //VBO: stores data (vertex coordinates, colors, indices, etc.) and a header that contains information about their format
-
-        //tell the GPU to make a single vertex array and store the returned id into the VBO int
-        int vao = glGenVertexArrays();
-
-        //set the current vertex array object
-        glBindVertexArray(vao);
-
-        //tell the gpu to make a VBO and store its ID in the 'coordVBO' varabile
-        int coordVBO = glGenBuffers();
-
-        //bind the 'coordVBO' VBO for use
-        glBindBuffer(GL_ARRAY_BUFFER, coordVBO);
-
-
-        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-
-        //specifies information about the format of the VBO (number of values per vertex, data type, etc.)
-        glVertexAttribPointer(0, 2, GL_DOUBLE, false, 0, 0);
-
-        //enable vertex attribute array 0
-        glEnableVertexAttribArray(0);
-
-        //create a second VBO for the colors
-        int colorVBO = glGenBuffers();
-
-        //bind the 'colorVBO' VBO for use
-        glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
-
-        //uploads VBO data (in this case, colors) to the GPU
-        glBufferData(GL_ARRAY_BUFFER, colors, GL_DYNAMIC_DRAW);
-
-        //specifies information about the format of the VBO (number of values per vertex, data type, etc.)
-        glVertexAttribPointer(1, 3, GL_DOUBLE, false, 0, 0);
-
-        //enable vertex attribute array 1
-        glEnableVertexAttribArray(1);
-
-        //create a third VBO for the indices (tells the GPU which vertices to render and when)
-        int indicesVBO = glGenBuffers();
-
-        //bind the 'indicesVBO' for use
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesVBO);
-
-        //uploads VBO data (in this case, colors) to the GPU
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_DYNAMIC_DRAW);
-
-        //unbind the last bound VBO
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-        glBindVertexArray(vao);
-
-    }
-
     private void compileShaders(){
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // before creating the window
 
@@ -249,19 +185,39 @@ public class HelloWorld {
             System.exit(-1);
         }
 
+        int gbuf = glGenFramebuffers();
+        glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
+        int gbufTex = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, gbufTex);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 1920, 1080, 0, GL_RGBA, GL_FLOAT, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufTex, 0);
+
+
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) ) {
+            glBindTexture(GL_TEXTURE_2D, tid);
+
+            glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
+            glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
             glDrawElements(GL_TRIANGLES, index.length, GL_UNSIGNED_INT, 0);
+            //glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
-            glfwSwapBuffers(window); // swap the color buffers
-
-
-            triangle[0] += 0.001f;
+            //triangle[0] += 1f;
             qbuf.update(index, triangle, color);
             qbuf.bindAndPush();
+
+            glBindTexture(GL_TEXTURE_2D, gbufTex);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glClearColor(0.5f, 0.5f, 0.9f, 0.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+            glDrawElements(GL_TRIANGLES, index.length, GL_UNSIGNED_INT, 0);
+
+            glfwSwapBuffers(window); // swap the color buffers
 
             // Poll for window events. The key callback above will only be
             // invoked during this call.
