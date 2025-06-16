@@ -59,6 +59,10 @@ public class HelloWorld {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // the window will be resizable
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
+        // ENABLE IF SHADER WON'T COMPILE:
+//        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // before creating the window
+//        GLUtil.setupDebugMessageCallback();
+
         // Create the window
         window = glfwCreateWindow(screenWidth, screenHeight, "Hello World!", NULL, NULL);
         if ( window == NULL )
@@ -123,40 +127,6 @@ public class HelloWorld {
             1.0, 1.0, 1.0, //third vertex color
             1.0, 0.0, 1.0, //third vertex color
     };
-    private void compileShaders(){
-        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // before creating the window
-
-        // ENABLE IF SHADER WON'T COMPILE:
-        //GLUtil.setupDebugMessageCallback();
-
-        //load the vertex shader from the file using a method I wrote down below
-        int vertexShader = loadShader(new File("src/main/resources/vert.glsl"), GL_VERTEX_SHADER);
-
-        //load the fragment shader from the file using a method I wrote down below
-        int fragmentShader = loadShader(new File("src/main/resources/frag.glsl"), GL_FRAGMENT_SHADER);
-
-
-
-        //create a program object and store its ID in the 'program' variable
-        int program = glCreateProgram();
-
-        //these method calls link shader program variables to attribute locations so that they can be modified in Java code
-        glBindAttribLocation(program, 0, "position");
-        glBindAttribLocation(program, 1, "color");
-
-        //attach the vertex and fragment shaders to the program
-        glAttachShader(program, vertexShader);
-        glAttachShader(program, fragmentShader);
-
-        //link the program (whatever that does)
-        glLinkProgram(program);
-
-        //validate the program to make sure it wont blow up the program
-        glValidateProgram(program);
-
-        glUseProgram(program);
-    }
-
     private void loop() {
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
@@ -165,18 +135,23 @@ public class HelloWorld {
         // bindings available for use.
         GL.createCapabilities();
 
-        // Set the clear color
-        glClearColor(0.5f, 0.5f, 0.9f, 0.0f);
-
-        //initBuffers();
-
         QuadBuffer qbuf = new QuadBuffer();
         qbuf.update(index, triangle, color);
         qbuf.bindAndPush();
 
         int tid = Texture.loadTexture("image.png");
 
-        compileShaders();
+        Shader shader = new Shader("src/main/resources/vert.glsl", "src/main/resources/frag.glsl") {
+            @Override
+            protected void bindAttributes() {
+                glBindAttribLocation(this.handle, 0, "position");
+                glBindAttribLocation(this.handle, 1, "color");
+            }
+        };
+
+        shader.use();
+
+        //compileShaders();
 
         int error = glGetError();
         if(error != 0) {
@@ -222,32 +197,6 @@ public class HelloWorld {
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwPollEvents();
-        }
-    }
-
-
-
-    public static int loadShader(File file, int type) {
-        try {
-            Scanner sc = new Scanner(file);
-            StringBuilder data = new StringBuilder();
-
-            if(file.exists()) {
-                while(sc.hasNextLine()) {
-                    data.append(sc.nextLine() + "\n");
-                }
-
-                sc.close();
-            }
-            int id = glCreateShader(type);
-            glShaderSource(id, data);
-            glCompileShader(id);
-            return id;
-        }
-
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return -1;
         }
     }
 
