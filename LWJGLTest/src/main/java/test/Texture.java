@@ -1,15 +1,15 @@
 package test;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.*;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
 import java.io.File;
-import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
+
 
 public class Texture {
     private static HashMap<String, Integer> idMap = new HashMap<String, Integer>();
@@ -32,14 +32,14 @@ public class Texture {
             width = w.get();
             height = h.get();
 
-            int id = GL11.glGenTextures();
+            int id = glGenTextures();
             idMap.put(resourceName, id);
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
-            GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+            glBindTexture(GL_TEXTURE_2D, id);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
-            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+            glGenerateMipmap(GL_TEXTURE_2D);
             STBImage.stbi_image_free(buffer);
             return id;
         } catch(Exception e) {
