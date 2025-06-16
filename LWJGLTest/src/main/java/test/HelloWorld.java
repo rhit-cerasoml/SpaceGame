@@ -64,8 +64,11 @@ public class HelloWorld {
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+            } else {
+                shader.reload();
+            }
         });
 
         // Get the thread stack and push a new frame
@@ -121,6 +124,8 @@ public class HelloWorld {
             1.0, 1.0, 1.0, //third vertex color
             1.0, 0.0, 1.0, //third vertex color
     };
+
+    Shader shader;
     private void loop() {
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
@@ -135,7 +140,7 @@ public class HelloWorld {
 
         int tid = Texture.loadTexture("image.png");
 
-        Shader shader = new Shader("src/main/resources/vert.glsl", "src/main/resources/frag.glsl") {
+        shader = new Shader("src/main/resources/vert.glsl", "src/main/resources/frag.glsl") {
             @Override
             protected void bindAttributes() {
                 glBindAttribLocation(this.handle, 0, "position");

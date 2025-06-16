@@ -8,12 +8,37 @@ import static org.lwjgl.opengl.GL20.*;
 
 public abstract class Shader {
     protected int handle;
+
+    private String vertex_path;
     private int vertex_handle;
+
+    private String fragment_path;
     private int fragment_handle;
     public Shader(String vertex_path, String fragment_path){
+        this.vertex_path = vertex_path;
+        this.fragment_path = fragment_path;
+
+        handle = glCreateProgram();
+
+        load();
+        use();
+        bindAttributes();
+    }
+
+    public void reload(){
+        System.out.println("reloading shader!");
+        use();
+        glDetachShader(handle, vertex_handle);
+        glDeleteShader(vertex_handle);
+
+        glDetachShader(handle, fragment_handle);
+        glDeleteShader(fragment_handle);
+        load();
+    }
+
+    private void load(){
         vertex_handle = loadShader(new File(vertex_path), GL_VERTEX_SHADER);
         fragment_handle = loadShader(new File(fragment_path), GL_FRAGMENT_SHADER);
-        handle = glCreateProgram();
 
         glAttachShader(handle, vertex_handle);
         glAttachShader(handle, fragment_handle);
@@ -21,10 +46,6 @@ public abstract class Shader {
         glLinkProgram(handle);
 
         glValidateProgram(handle);
-
-        glUseProgram(handle);
-
-        bindAttributes();
     }
 
     protected abstract void bindAttributes();
