@@ -96,10 +96,6 @@ public class Window {
 
         GL.createCapabilities();
 
-        // ENABLE IF SHADER WON'T COMPILE:
-//        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // before creating the window
-//        GLUtil.setupDebugMessageCallback();
-
         shader = new Shader("src/main/resources/final_pass_vert.glsl", "src/main/resources/final_pass_frag.glsl") {
             @Override
             protected void bindAttributes() {
@@ -137,22 +133,6 @@ public class Window {
 
     public void draw(int textureHandle) {
 
-//        QuadBuffer qbuf = new QuadBuffer();
-//        qbuf.update(index, triangle, color);
-//        qbuf.bindAndPush();
-
-//        int tid = Texture.loadTexture("image.png");
-//
-//        shader = new Shader("src/main/resources/vert.glsl", "src/main/resources/frag.glsl") {
-//            @Override
-//            protected void bindAttributes() {
-//                glBindAttribLocation(this.handle, 0, "position");
-//                glBindAttribLocation(this.handle, 1, "color");
-//            }
-//        };
-//
-//        shader.use();
-
         int error = glGetError();
         if(error != 0) {
             System.out.println("OpenGL Error: " + error);
@@ -160,34 +140,20 @@ public class Window {
             System.exit(-1);
         }
 
-//        int gbuf = glGenFramebuffers();
-//        glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
-//        int gbufTex = glGenTextures();
-//        glBindTexture(GL_TEXTURE_2D, gbufTex);
-//       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 1920 / scale, 1080 / scale, 0, GL_RGBA, GL_FLOAT, NULL);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufTex, 0);
+        shader.use();
+        glViewport(0, 0, 1920, 1080);
+        glBindTexture(GL_TEXTURE_2D, textureHandle);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glBindVertexArray(vao);
+        glClearColor(0.5f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
+        glfwSwapBuffers(window); // swap the color buffers
 
-
-        //while ( !glfwWindowShouldClose(window) ) {
-
-            shader.use();
-            glViewport(0, 0, 1920, 1080);
-            glBindTexture(GL_TEXTURE_2D, textureHandle);
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            glBindVertexArray(vao);
-            glClearColor(0.5f, 0.0f, 0.0f, 0.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-
-            glfwSwapBuffers(window); // swap the color buffers
-
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
-            glfwPollEvents();
-        //}
+        // Poll for window events. The key callback above will only be
+        // invoked during this call.
+        glfwPollEvents();
     }
 
     public boolean shouldClose(){

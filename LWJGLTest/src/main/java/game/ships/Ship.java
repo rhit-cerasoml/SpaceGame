@@ -4,6 +4,8 @@ import game.CenterOfMassWalker;
 import game.MomentWalker;
 import game.Vec2;
 import game.quadtree.QuadTree;
+import game.quadtree.QuadTreePositionWalker;
+import game.quadtree.QuadTreeWalker;
 import game.util.physics.BodyConstants;
 import game.util.physics.PhysicsObject;
 
@@ -42,5 +44,9 @@ public class Ship extends PhysicsObject {
         grid.walk(momentWalker);
         double moment = momentWalker.getMoment();
         constants = new BodyConstants(mass, moment, com.addCopy(0.5, 0.5));
+    }
+
+    public void runWalker(QuadTreePositionWalker<ShipTile> walker){
+        grid.walk(walker);
     }
 }
