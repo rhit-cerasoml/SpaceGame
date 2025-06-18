@@ -5,13 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="97feac5d-bb36-4b38-810f-deb396129368" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../VOIP/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../QuadTreeTests/src/game/ships/IMeshable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../QuadTreeTests/src/game/util/QuadTreeMesher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VOIP/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../VOIP/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VOIP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../VOIP/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VOIP/src/example/EndpointsServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VOIP/src/example/EndpointsServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VOIP/src/voip/endpoints/MicrophoneHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VOIP/src/voip/endpoints/MicrophoneHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/test/HelloWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/graphics/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/test/QuadBuffer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/graphics/QuadBuffer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/test/Shader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/graphics/Shader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/test/Test2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/test/Texture.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/graphics/Texture.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/test/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/graphics/Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/frag.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/frag.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/vert.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/vert.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../QuadTreeTests/src/game/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../QuadTreeTests/src/game/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,45 +35,46 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/main/resources/vert.glsl" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/main/java/test/Test2.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/main/resources/frag.glsl" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/src/main/java/test/HelloWorld.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/graphics/Window.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 8
-}]]></component>
   <component name="ProjectId" id="2ukOOwtcJuNya9P57dILFeerRav" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
-  }
-}]]></component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Twig\Desktop\SpaceGame\LWJGLTest\src\main\java" />
       <recent name="C:\Users\Max Cerasoli\Desktop\SpaceGame\LWJGLTest\src\main\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.HelloWorld">
-    <configuration name="HelloWorld" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="test.HelloWorld" />
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="game.Main" />
       <module name="LWJGLTest" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="test.*" />
+          <option name="PATTERN" value="game.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -75,11 +83,24 @@
       </method>
     </configuration>
     <configuration name="Test2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="test.Test2" />
+      <option name="MAIN_CLASS_NAME" value="graphics.Test2" />
       <module name="LWJGLTest" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="test.*" />
+          <option name="PATTERN" value="graphics.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Window" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="graphics.Window" />
+      <module name="LWJGLTest" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="graphics.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -89,7 +110,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.HelloWorld" />
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Window" />
         <item itemvalue="Application.Test2" />
       </list>
     </recent_temporary>

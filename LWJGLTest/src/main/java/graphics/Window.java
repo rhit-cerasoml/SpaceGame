@@ -1,4 +1,4 @@
-package test;
+package graphics;
 
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
@@ -15,17 +15,19 @@ import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class HelloWorld {
+public class Window {
 
-    // The window handle
-    private long window;
+    public long window;
+    private Shader shader;
+    private int vao;
+    private int vbo;
+    private ByteBuffer screenQuad;
 
-    public void run() {
-        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
+    public Window(String title){
+        init(title);
+    }
 
-        init();
-        loop();
-
+    public void deconstruct(){
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
@@ -35,7 +37,7 @@ public class HelloWorld {
         glfwSetErrorCallback(null).free();
     }
 
-    private void init() {
+    private void init(String title) {
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
@@ -53,12 +55,8 @@ public class HelloWorld {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // the window will be resizable
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
-        // ENABLE IF SHADER WON'T COMPILE:
-//        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // before creating the window
-//        GLUtil.setupDebugMessageCallback();
-
         // Create the window
-        window = glfwCreateWindow(screenWidth, screenHeight, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(screenWidth, screenHeight, title, NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -66,8 +64,6 @@ public class HelloWorld {
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
             if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
-            } else {
-                shader.reload();
             }
         });
 
@@ -97,60 +93,65 @@ public class HelloWorld {
 
         // Make the window visible
         glfwShowWindow(window);
-    }
 
-    private int[] index = {
-            //the order to render the vertices
-            0,
-            1,
-            2,
-            0,
-            3,
-            2
-    };
-
-    //the vertex data (x and y)
-    double[] triangle = {
-            -1.0,	 1.0, //first x and y
-            -1.0,	-1.0, //second x and y
-            1.0,	-1.0, //third x and y
-            1.0,     1.0
-    };
-
-    //the color data (red, green, and blue)
-    double[] color = {
-            0.0, 0.0, 0.0, //first vertex color
-            0.0, 1.0, 0.0, //second vertex color
-            1.0, 1.0, 1.0, //third vertex color
-            1.0, 0.0, 1.0, //third vertex color
-    };
-
-    Shader shader;
-    private void loop() {
-        // This line is critical for LWJGL's interoperation with GLFW's
-        // OpenGL context, or any context that is managed externally.
-        // LWJGL detects the context that is current in the current thread,
-        // creates the GLCapabilities instance and makes the OpenGL
-        // bindings available for use.
         GL.createCapabilities();
 
-        QuadBuffer qbuf = new QuadBuffer();
-        qbuf.update(index, triangle, color);
-        qbuf.bindAndPush();
+        // ENABLE IF SHADER WON'T COMPILE:
+//        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // before creating the window
+//        GLUtil.setupDebugMessageCallback();
 
-        int tid = Texture.loadTexture("image.png");
-
-        shader = new Shader("src/main/resources/vert.glsl", "src/main/resources/frag.glsl") {
+        shader = new Shader("src/main/resources/final_pass_vert.glsl", "src/main/resources/final_pass_frag.glsl") {
             @Override
             protected void bindAttributes() {
                 glBindAttribLocation(this.handle, 0, "position");
-                glBindAttribLocation(this.handle, 1, "color");
             }
         };
-
         shader.use();
 
-        //compileShaders();
+        vao = glGenVertexArrays();
+        vbo = glGenBuffers();
+        glBindVertexArray(vao);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glVertexAttribPointer(0, 2, GL_INT, false, 0, 0);
+        glEnableVertexAttribArray(0);
+
+        screenQuad = BufferUtils.createByteBuffer(12 * 4);
+        screenQuad.putInt(-1);
+        screenQuad.putInt(-1);
+        screenQuad.putInt(-1);
+        screenQuad.putInt(1);
+        screenQuad.putInt(1);
+        screenQuad.putInt(-1);
+        screenQuad.putInt(1);
+        screenQuad.putInt(-1);
+        screenQuad.putInt(-1);
+        screenQuad.putInt(1);
+        screenQuad.putInt(1);
+        screenQuad.putInt(1);
+        screenQuad.position(0);
+
+        glBindVertexArray(vao);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, screenQuad, GL_STATIC_DRAW);
+    }
+
+    public void draw(int textureHandle) {
+
+//        QuadBuffer qbuf = new QuadBuffer();
+//        qbuf.update(index, triangle, color);
+//        qbuf.bindAndPush();
+
+//        int tid = Texture.loadTexture("image.png");
+//
+//        shader = new Shader("src/main/resources/vert.glsl", "src/main/resources/frag.glsl") {
+//            @Override
+//            protected void bindAttributes() {
+//                glBindAttribLocation(this.handle, 0, "position");
+//                glBindAttribLocation(this.handle, 1, "color");
+//            }
+//        };
+//
+//        shader.use();
 
         int error = glGetError();
         if(error != 0) {
@@ -159,48 +160,38 @@ public class HelloWorld {
             System.exit(-1);
         }
 
-        int gbuf = glGenFramebuffers();
-        glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
-        int gbufTex = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, gbufTex);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 1920, 1080, 0, GL_RGBA, GL_FLOAT, NULL);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufTex, 0);
+//        int gbuf = glGenFramebuffers();
+//        glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
+//        int gbufTex = glGenTextures();
+//        glBindTexture(GL_TEXTURE_2D, gbufTex);
+//       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 1920 / scale, 1080 / scale, 0, GL_RGBA, GL_FLOAT, NULL);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufTex, 0);
 
 
-        // Run the rendering loop until the user has attempted to close
-        // the window or has pressed the ESCAPE key.
-        while ( !glfwWindowShouldClose(window) ) {
-            glBindTexture(GL_TEXTURE_2D, tid);
 
-            glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
-            glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+        //while ( !glfwWindowShouldClose(window) ) {
 
-            glDrawElements(GL_TRIANGLES, index.length, GL_UNSIGNED_INT, 0);
-            //glDrawBuffer(GL_COLOR_ATTACHMENT0);
-
-            //triangle[0] += 1f;
-            qbuf.update(index, triangle, color);
-            qbuf.bindAndPush();
-
-            glBindTexture(GL_TEXTURE_2D, gbufTex);
+            shader.use();
+            glViewport(0, 0, 1920, 1080);
+            glBindTexture(GL_TEXTURE_2D, textureHandle);
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            glClearColor(0.5f, 0.5f, 0.9f, 0.0f);
+            glBindVertexArray(vao);
+            glClearColor(0.5f, 0.0f, 0.0f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-            glDrawElements(GL_TRIANGLES, index.length, GL_UNSIGNED_INT, 0);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
 
             glfwSwapBuffers(window); // swap the color buffers
 
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwPollEvents();
-        }
+        //}
     }
 
-    public static void main(String[] args) {
-        new HelloWorld().run();
+    public boolean shouldClose(){
+        return glfwWindowShouldClose(window);
     }
 
 }
