@@ -66,6 +66,7 @@ public class Main {
         int gbuf = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
         int gbufTex = glGenTextures();
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, gbufTex);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 1920 / scale, 1080 / scale, 0, GL_RGBA, GL_FLOAT, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -74,10 +75,13 @@ public class Main {
 
         int tid = Texture.loadTexture("../../../../Art/floor0.png");
 
-
+        Atlas atlas = new Atlas();
+        atlas.bind();
+        glUniform1i(0, 1);
 
         while(!window.shouldClose()){
             s.use();
+            glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, tid);
             glViewport(0, 0, 1920 / scale, 1080 / scale);
             glBindFramebuffer(GL_FRAMEBUFFER, gbuf);

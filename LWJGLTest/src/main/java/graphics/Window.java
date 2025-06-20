@@ -142,6 +142,7 @@ public class Window {
 
         shader.use();
         glViewport(0, 0, 1920, 1080);
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureHandle);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glBindVertexArray(vao);

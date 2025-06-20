@@ -27,7 +27,7 @@ public class Texture {
             String filePath = file.getAbsolutePath();
             buffer = STBImage.stbi_load(filePath, w, h, channels, 4);
             if(buffer ==null) {
-                throw new Exception("Can't load file "+resourceName+" "+ STBImage.stbi_failure_reason());
+                throw new Exception("Can't load file " + resourceName + " " + STBImage.stbi_failure_reason());
             }
             width = w.get();
             height = h.get();
