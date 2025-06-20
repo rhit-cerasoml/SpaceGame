@@ -7,9 +7,9 @@
     <list default="true" id="97feac5d-bb36-4b38-810f-deb396129368" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/game/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/game/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/game/ships/Ship.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/game/ships/Ship.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/game/ships/ShipTile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/game/ships/ShipTile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graphics/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/graphics/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/graphics/Texture.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/graphics/Texture.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ship_tile_frag.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ship_tile_frag.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ship_tile_vert.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ship_tile_vert.glsl" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,16 +132,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/graphics/QuadBuffer.java</url>
-          <line>51</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/graphics/QuadBuffer.java</url>
-          <line>57</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/graphics/VertexDescriptor.java</url>
           <line>52</line>

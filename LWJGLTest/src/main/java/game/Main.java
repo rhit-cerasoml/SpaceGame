@@ -61,7 +61,7 @@ public class Main {
         qbuffer.bindAndPush();
 
 
-        int scale = 2;
+        int scale = 1;
 
         int gbuf = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
@@ -72,7 +72,7 @@ public class Main {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufTex, 0);
 
-        int tid = Texture.loadTexture("image.png");
+        int tid = Texture.loadTexture("../../../../Art/floor0.png");
 
 
 
