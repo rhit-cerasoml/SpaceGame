@@ -2,6 +2,8 @@ package graphics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.ByteBuffer;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import static org.lwjgl.opengl.GL20.*;
@@ -76,5 +78,14 @@ public abstract class Shader {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    private final HashMap<String, Integer> uniforms = new HashMap<>();
+    public int getUniformLocation(String uniformName) {
+        if(uniforms.containsKey(uniformName)) return uniforms.get(uniformName);
+        int res = glGetUniformLocation(handle, uniformName);
+        if(res == -1) throw new RuntimeException("invalid uniform name");
+        uniforms.put(uniformName, res);
+        return res;
     }
 }

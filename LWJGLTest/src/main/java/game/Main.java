@@ -6,6 +6,7 @@ import game.ships.ShipTileVertex;
 import game.util.QuadTreeMesher;
 import graphics.*;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.*;
@@ -75,14 +76,14 @@ public class Main {
 
         int tid = Texture.loadTexture("../../../../Art/floor0.png");
 
-        Atlas atlas = new Atlas();
-        atlas.bind();
-        glUniform1i(0, 1);
+        ArrayList<String> atlasPaths = new ArrayList<String>();
+        atlasPaths.add("floor0.png");
+        atlasPaths.add("floor1.png");
+        Atlas atlas = new Atlas(atlasPaths);
 
         while(!window.shouldClose()){
             s.use();
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, tid);
+            atlas.bind(0, s.getUniformLocation("atlas"));
             glViewport(0, 0, 1920 / scale, 1080 / scale);
             glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
             glClearColor(1.0f, 1.0f, 0.0f, 1.0f);

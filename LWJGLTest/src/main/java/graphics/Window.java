@@ -161,4 +161,15 @@ public class Window {
         return glfwWindowShouldClose(window);
     }
 
+    public static void checkGL(String pass){
+        int error = glGetError();
+        if(error != 0) {
+            System.out.println("OpenGL Error: " + error);
+            error = glGetError();
+            System.exit(-1);
+        }else{
+            System.out.println(pass);
+        }
+    }
+
 }
