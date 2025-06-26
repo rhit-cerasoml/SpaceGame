@@ -29,6 +29,8 @@ public class Window {
     private int vao;
     private int vbo;
     private ByteBuffer screenQuad;
+    private int screenWidth;
+    private int screenHeight;
 
     public Window(String title){
         init(title);
@@ -53,8 +55,8 @@ public class Window {
         if ( !glfwInit() )
             throw new IllegalStateException("Unable to initialize GLFW");
 
-        final int screenWidth = glfwGetVideoMode(glfwGetPrimaryMonitor()).width();
-        final int screenHeight = glfwGetVideoMode(glfwGetPrimaryMonitor()).height();
+        screenWidth = glfwGetVideoMode(glfwGetPrimaryMonitor()).width();
+        screenHeight = glfwGetVideoMode(glfwGetPrimaryMonitor()).height();
 
         // Configure GLFW
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
@@ -63,17 +65,15 @@ public class Window {
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
         
         // Create the window
-        changeWindowedMode(2, screenWidth, screenHeight, title);
+        changeWindowedMode(1, screenWidth, screenHeight, title);
 
         initGL();
 
-        // try{
-        //     Thread.sleep(2000);
-        // } catch(Exception e){
-        //     e.printStackTrace();
-        // }
-        // changeWindowedMode(2, screenWidth, screenHeight, "test");
 
+        changeWindowedMode(2, screenWidth, screenHeight, "test");
+
+
+        initGL();
     }
 
     private void initGL(){
@@ -124,7 +124,27 @@ public class Window {
         }
 
         shader.use();
-        glViewport(0, 0, 1920, 1080);
+        
+        IntBuffer widthBuffer = BufferUtils.createIntBuffer(1);
+        IntBuffer heightBuffer = BufferUtils.createIntBuffer(1);
+        glfwGetWindowSize(window, widthBuffer, heightBuffer);
+        
+        int width = widthBuffer.get(0);
+        int height = heightBuffer.get(0);
+
+        int viewportHeight;
+        int viewportWidth;
+        if (width >= height){//screen is wider than tall
+            viewportWidth = height *16/9;
+            glViewport((width-viewportWidth)/2, 0, viewportWidth, height);
+        
+        }else{//screen is taller than wide
+            viewportHeight = width *9/16;
+            glViewport(0, (height-viewportHeight)/2, width, viewportHeight);
+        
+        }
+        
+        
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureHandle);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
