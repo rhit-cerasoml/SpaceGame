@@ -67,7 +67,7 @@
       <module name="LWJGLTest" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="game.*" />
+          <option name="PATTERN" value="game.util.event.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
