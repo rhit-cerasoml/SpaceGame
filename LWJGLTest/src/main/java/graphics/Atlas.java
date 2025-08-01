@@ -1,5 +1,7 @@
 package graphics;
 
+import graphics.reload.GPUReloadRegistry;
+import graphics.reload.GPUUnloadRegistry;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
@@ -15,10 +17,14 @@ import static org.lwjgl.opengl.GL42.*;
 
 public class Atlas {
     private int handle;
+    private final ArrayList<String> paths;
     private HashMap<String, Integer> contentsMap;
 
     public Atlas(ArrayList<String> paths){
-        load(paths);
+        this.paths = paths;
+        load();
+        GPUUnloadRegistry.register((e) -> unload());
+        GPUReloadRegistry.register((e) -> load());
     }
     public void bind(int unit, int loc){
         glActiveTexture(GL_TEXTURE0 + unit);
@@ -26,8 +32,7 @@ public class Atlas {
         glUniform1i(loc, unit);
     }
 
-
-    private void load(ArrayList<String> paths) {
+    private void load() {
         handle = glGenTextures();
         glBindTexture(GL_TEXTURE_2D_ARRAY, handle);
         glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -56,5 +61,10 @@ public class Atlas {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void unload(){
+        glBindTexture(GL_TEXTURE_2D_ARRAY, handle);
+        glDeleteTextures(handle);
     }
 }

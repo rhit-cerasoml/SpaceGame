@@ -44,6 +44,8 @@ public class Window {
 
     public Window(String title){
         init(title);
+        GPUReloadRegistry.register(e -> unloadScreenQuad());
+        GPUReloadRegistry.register(e -> loadScreenQuad());
     }
 
     public void deconstruct(){
@@ -67,12 +69,6 @@ public class Window {
 
         screenWidth = glfwGetVideoMode(glfwGetPrimaryMonitor()).width();
         screenHeight = glfwGetVideoMode(glfwGetPrimaryMonitor()).height();
-
-        // Configure GLFW
-        glfwDefaultWindowHints(); // optional, the current window hints are already the default
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // the window will be resizable
-        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
         
         // Create the window
         changeWindowedMode(WindowMode.BORDERLESS_WINDOWED, screenWidth, screenHeight, title);
@@ -87,9 +83,13 @@ public class Window {
         };
         shader.use();
 
+        loadScreenQuad();
+    }
+
+    private void loadScreenQuad() {
         vao = glGenVertexArrays();
-        vbo = glGenBuffers();
         glBindVertexArray(vao);
+        vbo = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glVertexAttribPointer(0, 2, GL_INT, false, 0, 0);
         glEnableVertexAttribArray(0);
@@ -114,18 +114,16 @@ public class Window {
         glBufferData(GL_ARRAY_BUFFER, screenQuad, GL_STATIC_DRAW);
     }
 
+    private void unloadScreenQuad() {
+        glDeleteBuffers(vbo);
+        glDeleteVertexArrays(vao);
+    }
+
     private void initGL(){
         GL.createCapabilities();
     }
 
     public void draw(int textureHandle) {
-
-        int error = glGetError();
-        if(error != 0) {
-            System.out.println("OpenGL Error: " + error);
-            error = glGetError();
-            System.exit(-1);
-        }
 
         shader.use();
         
@@ -148,13 +146,13 @@ public class Window {
         
         }
         
-        
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureHandle);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glBindVertexArray(vao);
         glClearColor(0.5f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glfwSwapBuffers(window); // swap the color buffers
@@ -182,10 +180,16 @@ public class Window {
     //Change Window Mode between Fullscreen, Borderless Windowed Fullscreen, and Windowed
     // 0: Fullscreen, 1: Borderless Windowed Fullscreen, 2: Windowed
     public void changeWindowedMode(WindowMode mode, final int screenWidth, final int screenHeight, String title){
-        GPUUnloadRegistry.INSTANCE.fireEvent(new GPUUnloadEvent());
+        GPUUnloadRegistry.fire();
         if ( window != NULL ){
             glfwDestroyWindow(window);
         }
+
+        glfwDefaultWindowHints(); // optional, the current window hints are already the default
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // the window will be resizable
+        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+
         switch (mode) {
             case FULLSCREEN:
                 window = glfwCreateWindow(screenWidth, screenHeight, title, glfwGetPrimaryMonitor(), NULL);
@@ -236,7 +240,7 @@ public class Window {
         // Enable v-sync
         glfwSwapInterval(1);
 
-        GPUReloadRegistry.INSTANCE.fireEvent(new GPUReloadEvent());
+        GPUReloadRegistry.fire();
 
         // Make the window visible
         glfwShowWindow(window);

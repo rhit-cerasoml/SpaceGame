@@ -85,9 +85,10 @@ public class Main {
         atlasPaths.add("floor1.png");
         Atlas atlas = new Atlas(atlasPaths);
 
-        int i = 0;
-        while(!window.shouldClose() && i < 200){
+        int i = 9;
+        while(!window.shouldClose() && i < 200000){
             i++;
+
             s.use();
             atlas.bind(0, s.getUniformLocation("atlas"));
             glViewport(0, 0, 1920 / scale, 1080 / scale);
@@ -98,10 +99,29 @@ public class Main {
             qbuffer.bind();
             glDrawElements(GL_TRIANGLES, qbuffer.getCount(), GL_UNSIGNED_INT, 0);
 
-            window.draw(gbuf);
+            window.draw(gbufTex);
 
-            if(i == 10){
-                //window.changeWindowedMode(Window.WindowMode.BORDERLESS_WINDOWED, glfwGetVideoMode(glfwGetPrimaryMonitor()).width(), glfwGetVideoMode(glfwGetPrimaryMonitor()).height(), "test");
+            if(i == 100){
+                Window.checkGL("A");
+                glDeleteFramebuffers(gbuf);
+                Window.checkGL("B");
+                glDeleteTextures(gbufTex);
+                Window.checkGL("C");
+                window.changeWindowedMode(Window.WindowMode.WINDOWED, glfwGetVideoMode(glfwGetPrimaryMonitor()).width(), glfwGetVideoMode(glfwGetPrimaryMonitor()).height(), "test");
+                Window.checkGL("D");
+                gbuf = glGenFramebuffers();
+                glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
+                gbufTex = glGenTextures();
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, gbufTex);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 1920 / scale, 1080 / scale, 0, GL_RGBA, GL_FLOAT, NULL);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufTex, 0);
+
+                Window.checkGL("AA");
+                qbuffer.update(mesher.getVertices(), mesher.getIndices());
+                qbuffer.bindAndPush();
             }
         }
     }

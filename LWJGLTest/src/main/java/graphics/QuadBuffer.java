@@ -1,5 +1,7 @@
 package graphics;
 
+import graphics.reload.GPUReloadRegistry;
+import graphics.reload.GPUUnloadRegistry;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
@@ -9,16 +11,15 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL30.*;
 
 public class QuadBuffer<V extends VertexData> {
     ByteBuffer[] attributes;
     ByteBuffer indices;
 
-    private final int vao;
-    private final int[] attributeVBOs;
-    private final int indexVBO;
+    private int vao;
+    private int[] attributeVBOs;
+    private int indexVBO;
 
     private final VertexDescriptor vd;
 
@@ -27,6 +28,12 @@ public class QuadBuffer<V extends VertexData> {
 
     public QuadBuffer(VertexDescriptor vd){
         this.vd = vd;
+        load();
+        GPUUnloadRegistry.register((e) -> unload());
+        GPUReloadRegistry.register((e) -> load());
+    }
+
+    private void load(){
         vao = glGenVertexArrays();
 
         attributes = new ByteBuffer[vd.count];
@@ -46,6 +53,12 @@ public class QuadBuffer<V extends VertexData> {
         }
 
         glBindVertexArray(0);
+    }
+
+    private void unload(){
+        glBindVertexArray(vao);
+        glDeleteBuffers(indexVBO);
+        glDeleteVertexArrays(vao);
     }
 
     public void update(ArrayList<V> vertices, ArrayList<Integer> indexList) {
