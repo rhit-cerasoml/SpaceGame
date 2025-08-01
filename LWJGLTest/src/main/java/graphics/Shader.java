@@ -1,5 +1,9 @@
 package graphics;
 
+import graphics.reload.GPUReloadRegistry;
+import graphics.reload.GPUUnloadEvent;
+import graphics.reload.GPUUnloadRegistry;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
@@ -20,25 +24,41 @@ public abstract class Shader {
         this.vertex_path = vertex_path;
         this.fragment_path = fragment_path;
 
-        handle = glCreateProgram();
-
         load();
         use();
         bindAttributes();
+
+        GPUUnloadRegistry.INSTANCE.registerListener(e -> {
+
+            unload();
+            Window.checkGL("unload " + vertex_path);
+        });
+        GPUReloadRegistry.INSTANCE.registerListener(e -> {
+
+            load();
+            use();
+            bindAttributes();
+            Window.checkGL("reload " + vertex_path);
+        });
     }
 
     public void reload(){
-        System.out.println("reloading shader!");
-        use();
-        glDetachShader(handle, vertex_handle);
-        glDeleteShader(vertex_handle);
-
-        glDetachShader(handle, fragment_handle);
-        glDeleteShader(fragment_handle);
+        unload();
         load();
     }
 
+    private void unload(){
+        use();
+        glDetachShader(handle, vertex_handle);
+        glDeleteShader(vertex_handle);
+        glDetachShader(handle, fragment_handle);
+        glDeleteShader(fragment_handle);
+        glDeleteProgram(handle);
+    }
+
     private void load(){
+        handle = glCreateProgram();
+
         vertex_handle = loadShader(new File(vertex_path), GL_VERTEX_SHADER);
         fragment_handle = loadShader(new File(fragment_path), GL_FRAGMENT_SHADER);
 

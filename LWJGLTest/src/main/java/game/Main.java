@@ -9,6 +9,10 @@ import graphics.*;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
+import graphics.reload.GPUReloadEvent;
+import graphics.reload.GPUReloadRegistry;
+import graphics.reload.GPUUnloadEvent;
+import graphics.reload.GPUUnloadRegistry;
 import org.lwjgl.opengl.*;
 
 import static org.lwjgl.opengl.GL20.glBindAttribLocation;
@@ -61,7 +65,6 @@ public class Main {
         qbuffer.update(mesher.getVertices(), mesher.getIndices());
         qbuffer.bindAndPush();
 
-
         int scale = 1;
 
         int gbuf = glGenFramebuffers();
@@ -74,14 +77,17 @@ public class Main {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufTex, 0);
 
-        int tid = Texture.loadTexture("../../../../Art/floor0.png");
+//        int tid = Texture.loadTexture("../../../../Art/floor0.png");
+        //int tid = Texture.loadTexture("src/resources/floor0.png");
 
         ArrayList<String> atlasPaths = new ArrayList<String>();
         atlasPaths.add("floor0.png");
         atlasPaths.add("floor1.png");
         Atlas atlas = new Atlas(atlasPaths);
 
-        while(!window.shouldClose()){
+        int i = 0;
+        while(!window.shouldClose() && i < 200){
+            i++;
             s.use();
             atlas.bind(0, s.getUniformLocation("atlas"));
             glViewport(0, 0, 1920 / scale, 1080 / scale);
@@ -93,6 +99,10 @@ public class Main {
             glDrawElements(GL_TRIANGLES, qbuffer.getCount(), GL_UNSIGNED_INT, 0);
 
             window.draw(gbuf);
+
+            if(i == 10){
+                //window.changeWindowedMode(Window.WindowMode.BORDERLESS_WINDOWED, glfwGetVideoMode(glfwGetPrimaryMonitor()).width(), glfwGetVideoMode(glfwGetPrimaryMonitor()).height(), "test");
+            }
         }
     }
 }

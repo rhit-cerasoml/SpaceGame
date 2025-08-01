@@ -1,5 +1,9 @@
 package graphics;
 
+import graphics.reload.GPUReloadEvent;
+import graphics.reload.GPUReloadRegistry;
+import graphics.reload.GPUUnloadEvent;
+import graphics.reload.GPUUnloadRegistry;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -31,6 +35,12 @@ public class Window {
     private ByteBuffer screenQuad;
     private int screenWidth;
     private int screenHeight;
+
+    public enum WindowMode {
+        FULLSCREEN,
+        BORDERLESS_WINDOWED,
+        WINDOWED
+    }
 
     public Window(String title){
         init(title);
@@ -65,19 +75,9 @@ public class Window {
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
         
         // Create the window
-        changeWindowedMode(1, screenWidth, screenHeight, title);
+        changeWindowedMode(WindowMode.BORDERLESS_WINDOWED, screenWidth, screenHeight, title);
 
         initGL();
-
-
-        changeWindowedMode(2, screenWidth, screenHeight, "test");
-
-
-        initGL();
-    }
-
-    private void initGL(){
-        GL.createCapabilities();
 
         shader = new Shader("src/main/resources/final_pass_vert.glsl", "src/main/resources/final_pass_frag.glsl") {
             @Override
@@ -112,6 +112,10 @@ public class Window {
         glBindVertexArray(vao);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, screenQuad, GL_STATIC_DRAW);
+    }
+
+    private void initGL(){
+        GL.createCapabilities();
     }
 
     public void draw(int textureHandle) {
@@ -167,30 +171,31 @@ public class Window {
     public static void checkGL(String pass){
         int error = glGetError();
         if(error != 0) {
-            System.out.println("OpenGL Error: " + error);
+            System.out.println("Failed on " + pass + " - OpenGL Error: " + error);
             error = glGetError();
             System.exit(-1);
         }else{
-            System.out.println(pass);
+            System.out.println("check passed - " + pass);
         }
     }
 
     //Change Window Mode between Fullscreen, Borderless Windowed Fullscreen, and Windowed
     // 0: Fullscreen, 1: Borderless Windowed Fullscreen, 2: Windowed
-    public void changeWindowedMode(int mode, final int screenWidth, final int screenHeight, String title){
+    public void changeWindowedMode(WindowMode mode, final int screenWidth, final int screenHeight, String title){
+        GPUUnloadRegistry.INSTANCE.fireEvent(new GPUUnloadEvent());
         if ( window != NULL ){
             glfwDestroyWindow(window);
         }
         switch (mode) {
-            case 0: //Fullscreen
+            case FULLSCREEN:
                 window = glfwCreateWindow(screenWidth, screenHeight, title, glfwGetPrimaryMonitor(), NULL);
                 break;
-            case 1: //Borderless Windowed Fullscreen
+            case BORDERLESS_WINDOWED:
                 glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // the window will be resizable
                 glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
                 window = glfwCreateWindow(screenWidth, screenHeight, title, NULL, NULL);
                 break;
-            default: //Windowed
+            case WINDOWED:
                 glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
                 glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
                 window = glfwCreateWindow(screenWidth/2, screenHeight/2, title, NULL, NULL);
@@ -231,9 +236,10 @@ public class Window {
         // Enable v-sync
         glfwSwapInterval(1);
 
+        GPUReloadRegistry.INSTANCE.fireEvent(new GPUReloadEvent());
+
         // Make the window visible
         glfwShowWindow(window);
         
     }
-
 }
