@@ -1,4 +1,4 @@
-package graphics;
+package graphics.constructs;
 
 import graphics.reload.GPUReloadRegistry;
 import graphics.reload.GPUUnloadRegistry;
@@ -13,7 +13,8 @@ public class FrameBuffer {
     private int frameBuffer;
     private int bufferTexture;
 
-    private int width, height;
+    private final int width;
+    private final int height;
     public FrameBuffer(int width, int height) {
         this.width = width;
         this.height = height;

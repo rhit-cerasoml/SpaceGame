@@ -4,24 +4,14 @@ import game.ships.Ship;
 import game.ships.ShipTile;
 import game.ships.ShipTileVertex;
 import game.util.QuadTreeMesher;
-import graphics.*;
+import graphics.constructs.*;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-
-import graphics.reload.GPUReloadEvent;
-import graphics.reload.GPUReloadRegistry;
-import graphics.reload.GPUUnloadEvent;
-import graphics.reload.GPUUnloadRegistry;
-import org.lwjgl.opengl.*;
 
 import static org.lwjgl.opengl.GL20.glBindAttribLocation;
 import static org.lwjgl.glfw.GLFW.*;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.system.MemoryUtil.*;
 
 public class Main {
 

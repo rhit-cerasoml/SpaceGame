@@ -1,7 +1,7 @@
 package game.ships;
 
-import graphics.VertexData;
-import graphics.VertexDescriptor;
+import graphics.constructs.vertex.VertexData;
+import graphics.constructs.vertex.VertexDescriptor;
 
 import static org.lwjgl.opengl.GL11.GL_DOUBLE;
 import static org.lwjgl.opengl.GL11.GL_INT;

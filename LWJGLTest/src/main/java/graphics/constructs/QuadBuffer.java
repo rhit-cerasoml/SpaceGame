@@ -1,5 +1,7 @@
-package graphics;
+package graphics.constructs;
 
+import graphics.constructs.vertex.VertexData;
+import graphics.constructs.vertex.VertexDescriptor;
 import graphics.reload.GPUReloadRegistry;
 import graphics.reload.GPUUnloadRegistry;
 import org.lwjgl.BufferUtils;

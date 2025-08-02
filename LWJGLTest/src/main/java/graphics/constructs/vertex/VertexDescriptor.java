@@ -1,4 +1,4 @@
-package graphics;
+package graphics.constructs.vertex;
 
 import org.lwjgl.BufferUtils;
 
@@ -39,7 +39,7 @@ public class VertexDescriptor {
         };
     }
 
-    void collect(ArrayList<? extends VertexData> vertices, ByteBuffer[] buffers){
+    public void collect(ArrayList<? extends VertexData> vertices, ByteBuffer[] buffers){
         for(int i = 0; i < buffers.length; i++){
             buffers[i] = BufferUtils.createByteBuffer(vertices.size() * getTypeSize(attribute_types[i]) * attribute_sizes[i]);
         }

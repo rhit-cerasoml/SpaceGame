@@ -1,4 +1,4 @@
-package graphics.reload;
+package graphics.reload.events;
 
 public class GPUReloadEvent {
 

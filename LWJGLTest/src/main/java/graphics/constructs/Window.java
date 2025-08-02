@@ -1,8 +1,7 @@
-package graphics;
+package graphics.constructs;
 
-import graphics.reload.GPUReloadEvent;
+import graphics.constructs.Shader;
 import graphics.reload.GPUReloadRegistry;
-import graphics.reload.GPUUnloadEvent;
 import graphics.reload.GPUUnloadRegistry;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;

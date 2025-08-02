@@ -86,7 +86,7 @@
       <module name="LWJGLTest" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="graphics.reload.*" />
+          <option name="PATTERN" value="graphics.reload.events.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -95,11 +95,11 @@
       </method>
     </configuration>
     <configuration name="Window" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="graphics.Window" />
+      <option name="MAIN_CLASS_NAME" value="graphics.constructs.Window" />
       <module name="LWJGLTest" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="graphics.reload.*" />
+          <option name="PATTERN" value="graphics.reload.events.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>

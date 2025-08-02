@@ -1,4 +1,4 @@
-package graphics;
+package graphics.constructs;
 
 import graphics.reload.GPUReloadRegistry;
 import graphics.reload.GPUUnloadRegistry;

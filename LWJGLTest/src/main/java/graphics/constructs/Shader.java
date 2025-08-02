@@ -1,12 +1,10 @@
-package graphics;
+package graphics.constructs;
 
 import graphics.reload.GPUReloadRegistry;
-import graphics.reload.GPUUnloadEvent;
 import graphics.reload.GPUUnloadRegistry;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Scanner;
 

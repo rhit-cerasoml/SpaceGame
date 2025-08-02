@@ -1,4 +1,4 @@
-package graphics;
+package graphics.constructs.vertex;
 
 import static org.lwjgl.opengl.GL11.GL_DOUBLE;
 

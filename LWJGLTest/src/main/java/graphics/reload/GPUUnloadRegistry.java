@@ -2,6 +2,7 @@ package graphics.reload;
 
 import game.util.event.EventListener;
 import game.util.event.EventRegistry;
+import graphics.reload.events.GPUUnloadEvent;
 
 public class GPUUnloadRegistry extends EventRegistry<GPUUnloadEvent> {
     private static GPUUnloadRegistry INSTANCE = new GPUUnloadRegistry();

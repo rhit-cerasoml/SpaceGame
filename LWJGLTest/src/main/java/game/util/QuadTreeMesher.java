@@ -2,7 +2,7 @@ package game.util;
 
 import game.quadtree.QuadTreePositionWalker;
 import game.ships.IMeshable;
-import graphics.VertexData;
+import graphics.constructs.vertex.VertexData;
 
 import java.util.ArrayList;
 

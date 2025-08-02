@@ -1,6 +1,6 @@
 package game.ships;
 
-import graphics.VertexData;
+import graphics.constructs.vertex.VertexData;
 
 import java.util.ArrayList;
 

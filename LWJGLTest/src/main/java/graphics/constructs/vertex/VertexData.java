@@ -1,4 +1,4 @@
-package graphics;
+package graphics.constructs.vertex;
 
 public abstract class VertexData {
     public abstract double getDouble(int attribute, int index);
