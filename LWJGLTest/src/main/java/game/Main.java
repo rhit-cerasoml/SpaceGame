@@ -67,15 +67,7 @@ public class Main {
 
         int scale = 1;
 
-        int gbuf = glGenFramebuffers();
-        glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
-        int gbufTex = glGenTextures();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, gbufTex);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 1920 / scale, 1080 / scale, 0, GL_RGBA, GL_FLOAT, NULL);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufTex, 0);
+        FrameBuffer gbuffer = new FrameBuffer(1920, 1080);
 
 //        int tid = Texture.loadTexture("../../../../Art/floor0.png");
         //int tid = Texture.loadTexture("src/resources/floor0.png");
@@ -85,41 +77,33 @@ public class Main {
         atlasPaths.add("floor1.png");
         Atlas atlas = new Atlas(atlasPaths);
 
-        int i = 9;
-        while(!window.shouldClose() && i < 200000){
+        int i = 0;
+        while(!window.shouldClose() && i < 20 * 100){
             i++;
 
             s.use();
             atlas.bind(0, s.getUniformLocation("atlas"));
-            glViewport(0, 0, 1920 / scale, 1080 / scale);
-            glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
+
+            gbuffer.bind();
+
             glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             qbuffer.bind();
             glDrawElements(GL_TRIANGLES, qbuffer.getCount(), GL_UNSIGNED_INT, 0);
 
-            window.draw(gbufTex);
+            window.draw(gbuffer.getTextureHandle());
 
-            if(i == 100){
-                Window.checkGL("A");
-                glDeleteFramebuffers(gbuf);
-                Window.checkGL("B");
-                glDeleteTextures(gbufTex);
-                Window.checkGL("C");
+            if(i % 200 == 0){;
+
                 window.changeWindowedMode(Window.WindowMode.WINDOWED, glfwGetVideoMode(glfwGetPrimaryMonitor()).width(), glfwGetVideoMode(glfwGetPrimaryMonitor()).height(), "test");
-                Window.checkGL("D");
-                gbuf = glGenFramebuffers();
-                glBindFramebuffer(GL_FRAMEBUFFER, gbuf);
-                gbufTex = glGenTextures();
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, gbufTex);
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 1920 / scale, 1080 / scale, 0, GL_RGBA, GL_FLOAT, NULL);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gbufTex, 0);
 
-                Window.checkGL("AA");
+                qbuffer.update(mesher.getVertices(), mesher.getIndices());
+                qbuffer.bindAndPush();
+            }else if(i % 200 == 100){
+
+                window.changeWindowedMode(Window.WindowMode.BORDERLESS_WINDOWED, glfwGetVideoMode(glfwGetPrimaryMonitor()).width(), glfwGetVideoMode(glfwGetPrimaryMonitor()).height(), "test");
+
                 qbuffer.update(mesher.getVertices(), mesher.getIndices());
                 qbuffer.bindAndPush();
             }
