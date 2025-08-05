@@ -4,7 +4,9 @@ import game.ships.Ship;
 import game.ships.ShipTile;
 import game.ships.ShipTileVertex;
 import game.util.QuadTreeMesher;
+import game.util.physics.Transform;
 import graphics.constructs.*;
+import graphics.constructs.unfiroms.TransformMatrix;
 
 import java.util.ArrayList;
 
@@ -12,6 +14,7 @@ import static org.lwjgl.opengl.GL20.glBindAttribLocation;
 import static org.lwjgl.glfw.GLFW.*;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.glUniform1i;
 
 public class Main {
 
@@ -79,10 +82,17 @@ public class Main {
             glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            glUniform1i(0, i);
+            TransformMatrix mat = new TransformMatrix(1);
+            mat.bindData(new Transform(0, 0, (float)Math.toRadians(i)));
+
             qbuffer.bind();
+            //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawElements(GL_TRIANGLES, qbuffer.getCount(), GL_UNSIGNED_INT, 0);
 
+            //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             window.draw(gbuffer.getTextureHandle());
+
 
             if(i % 200 == 0){;
 

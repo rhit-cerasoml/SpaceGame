@@ -27,19 +27,12 @@ public abstract class Shader {
         bindAttributes();
 
         GPUUnloadRegistry.register(e -> {
-
             unload();
-            Window.checkGL("unload " + vertex_path);
         });
         GPUReloadRegistry.register(e -> {
-
-            Window.checkGL("pre-reload " + vertex_path);
             load();
-            Window.checkGL("reload " + vertex_path);
             use();
-            Window.checkGL("use " + vertex_path);
             bindAttributes();
-            Window.checkGL("bind " + vertex_path);
         });
     }
 
