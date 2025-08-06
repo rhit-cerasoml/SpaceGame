@@ -98,7 +98,7 @@ public abstract class Shader {
     public int getUniformLocation(String uniformName) {
         if(uniforms.containsKey(uniformName)) return uniforms.get(uniformName);
         int res = glGetUniformLocation(handle, uniformName);
-        if(res == -1) throw new RuntimeException("invalid uniform name");
+        if(res == -1) System.out.println("invalid uniform name " + uniformName);
         uniforms.put(uniformName, res);
         return res;
     }

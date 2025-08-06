@@ -6,12 +6,11 @@ import game.ships.ShipTileVertex;
 import game.util.QuadTreeMesher;
 import game.util.physics.Transform;
 import graphics.constructs.*;
-import graphics.constructs.unfiroms.TransformMatrix;
+import graphics.constructs.uniforms.TransformMatrix;
 
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL20.glBindAttribLocation;
-import static org.lwjgl.glfw.GLFW.*;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.glUniform1i;
@@ -21,7 +20,7 @@ public class Main {
 
     public static void main(String[] args){
         //Window.main("game.Window", args);
-        Window window = new Window("Space Game");
+        Window window = new Window("Space Game", Window.WindowMode.WINDOWED);
 
         // ENABLE IF SHADER WON'T COMPILE:
 //        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // before creating the window
@@ -71,7 +70,7 @@ public class Main {
         Atlas atlas = new Atlas(atlasPaths);
 
         int i = 0;
-        while(!window.shouldClose() && i < 20 * 100){
+        while(!window.shouldClose() && i < 20 * 1000){
             i++;
 
             s.use();
@@ -84,29 +83,29 @@ public class Main {
 
             glUniform1i(0, i);
             TransformMatrix mat = new TransformMatrix(1);
-            mat.bindData(new Transform(0, 0, (float)Math.toRadians(i)));
+            mat.bindData(new Transform(10, 0, (float)Math.toRadians(i)));
 
             qbuffer.bind();
-            //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawElements(GL_TRIANGLES, qbuffer.getCount(), GL_UNSIGNED_INT, 0);
 
-            //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             window.draw(gbuffer.getTextureHandle());
 
 
-            if(i % 200 == 0){;
-
-                window.changeWindowedMode(Window.WindowMode.WINDOWED, glfwGetVideoMode(glfwGetPrimaryMonitor()).width(), glfwGetVideoMode(glfwGetPrimaryMonitor()).height(), "test");
-
-                qbuffer.update(mesher.getVertices(), mesher.getIndices());
-                qbuffer.bindAndPush();
-            }else if(i % 200 == 100){
-
-                window.changeWindowedMode(Window.WindowMode.BORDERLESS_WINDOWED, glfwGetVideoMode(glfwGetPrimaryMonitor()).width(), glfwGetVideoMode(glfwGetPrimaryMonitor()).height(), "test");
-
-                qbuffer.update(mesher.getVertices(), mesher.getIndices());
-                qbuffer.bindAndPush();
-            }
+//            if(i % 200 == 0){;
+//
+//                window.changeWindowedMode(Window.WindowMode.WINDOWED, glfwGetVideoMode(glfwGetPrimaryMonitor()).width(), glfwGetVideoMode(glfwGetPrimaryMonitor()).height(), "test");
+//
+//                qbuffer.update(mesher.getVertices(), mesher.getIndices());
+//                qbuffer.bindAndPush();
+//            }else if(i % 200 == 100){
+//
+//                window.changeWindowedMode(Window.WindowMode.BORDERLESS_WINDOWED, glfwGetVideoMode(glfwGetPrimaryMonitor()).width(), glfwGetVideoMode(glfwGetPrimaryMonitor()).height(), "test");
+//
+//                qbuffer.update(mesher.getVertices(), mesher.getIndices());
+//                qbuffer.bindAndPush();
+//            }
         }
     }
 }

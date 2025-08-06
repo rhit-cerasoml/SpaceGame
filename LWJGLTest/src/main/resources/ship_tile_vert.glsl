@@ -10,6 +10,13 @@ layout (location = 1) uniform mat3 transform;
 out vec2 fragUV;
 
 void main() {
-    gl_Position = vec4((transform * vec3(position.x / 16 * 10, position.y / 9 * 10, 0.0)).xyz, 1.0);
+    vec3 pos = vec3(position.x, position.y, 0.0);
+
+    pos = transform * pos;
+
+    pos.x = pos.x / 16 * 10;
+    pos.y = pos.y / 9 * 10;
+
+    gl_Position = vec4(pos, 1.0);
     fragUV = uv;
 }

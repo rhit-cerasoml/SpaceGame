@@ -41,8 +41,8 @@ public class Window {
         WINDOWED
     }
 
-    public Window(String title){
-        init(title);
+    public Window(String title, WindowMode mode){
+        init(title, mode);
         GPUReloadRegistry.register(e -> unloadScreenQuad());
         GPUReloadRegistry.register(e -> loadScreenQuad());
     }
@@ -57,7 +57,7 @@ public class Window {
         glfwSetErrorCallback(null).free();
     }
 
-    private void init(String title) {
+    private void init(String title, WindowMode mode) {
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
@@ -70,7 +70,7 @@ public class Window {
         screenHeight = glfwGetVideoMode(glfwGetPrimaryMonitor()).height();
         
         // Create the window
-        changeWindowedMode(WindowMode.BORDERLESS_WINDOWED, screenWidth, screenHeight, title);
+        changeWindowedMode(mode, screenWidth, screenHeight, title);
 
         initGL();
 
@@ -135,12 +135,12 @@ public class Window {
 
         int viewportHeight;
         int viewportWidth;
-        if (width >= height){//screen is wider than tall
-            viewportWidth = height *16/9;
+        if (width / 16 >= height / 9){//screen is wider than tall
+            viewportWidth = height * 16/9;
             glViewport((width-viewportWidth)/2, 0, viewportWidth, height);
         
         }else{//screen is taller than wide
-            viewportHeight = width *9/16;
+            viewportHeight = width * 9/16;
             glViewport(0, (height-viewportHeight)/2, width, viewportHeight);
         
         }

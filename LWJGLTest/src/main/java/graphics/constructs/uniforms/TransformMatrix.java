@@ -1,4 +1,4 @@
-package graphics.constructs.unfiroms;
+package graphics.constructs.uniforms;
 
 import game.util.physics.Transform;
 
