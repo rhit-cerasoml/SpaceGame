@@ -4,7 +4,6 @@ import game.ships.Ship;
 import game.ships.ShipTile;
 import game.ships.ShipTileVertex;
 import game.util.QuadTreeMesher;
-import game.util.physics.Transform;
 import graphics.constructs.*;
 import graphics.constructs.uniforms.TransformMatrix;
 
@@ -83,7 +82,7 @@ public class Main {
 
             glUniform1i(0, i);
             TransformMatrix mat = new TransformMatrix(1);
-            mat.bindData(new Transform(0, 0, (float)Math.toRadians(i)));
+            mat.bindData(ship.getTransform());
 
             qbuffer.bind();
             //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -92,7 +91,7 @@ public class Main {
             //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             window.draw(gbuffer.getTextureHandle());
 
-
+            ship.tickShip();
 //            if(i % 200 == 0){;
 //
 //                window.changeWindowedMode(Window.WindowMode.WINDOWED, glfwGetVideoMode(glfwGetPrimaryMonitor()).width(), glfwGetVideoMode(glfwGetPrimaryMonitor()).height(), "test");

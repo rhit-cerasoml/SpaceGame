@@ -14,8 +14,10 @@ void main() {
 
     pos = transform * pos;
 
-    pos.x = pos.x / 16 * 10;
-    pos.y = pos.y / 9 * 10;
+    pos.x = pos.x / 16;
+    pos.y = pos.y / 9;
+
+    pos /= 8;
 
     gl_Position = vec4(pos.xy, 0.0, 1.0);
     fragUV = uv;
