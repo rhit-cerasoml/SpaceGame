@@ -83,13 +83,13 @@ public class Main {
 
             glUniform1i(0, i);
             TransformMatrix mat = new TransformMatrix(1);
-            mat.bindData(new Transform(10, 0, (float)Math.toRadians(i)));
+            mat.bindData(new Transform(0, 0, (float)Math.toRadians(i)));
 
             qbuffer.bind();
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glDrawElements(GL_TRIANGLES, qbuffer.getCount(), GL_UNSIGNED_INT, 0);
 
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             window.draw(gbuffer.getTextureHandle());
 
 

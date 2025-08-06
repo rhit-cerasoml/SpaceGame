@@ -15,12 +15,14 @@ public class TransformMatrix {
         data[0] = (float) Math.cos(t.getT());
         data[1] = (float) Math.sin(t.getT());
         data[2] = t.getX();
-        data[3] = (float) -Math.sin(t.getT());
+
+        data[3] = -data[1];
         data[4] = data[0];
         data[5] = t.getY();
+
         data[6] = 0;
         data[7] = 0;
         data[8] = 1;
-        glUniformMatrix3fv(layout, false, data);
+        glUniformMatrix3fv(layout, true, data);
     }
 }
