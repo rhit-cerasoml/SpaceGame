@@ -9,6 +9,8 @@ import graphics.constructs.uniforms.TransformMatrix;
 
 import java.util.ArrayList;
 
+import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
+import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
 import static org.lwjgl.opengl.GL20.glBindAttribLocation;
 
 import static org.lwjgl.opengl.GL11.*;
