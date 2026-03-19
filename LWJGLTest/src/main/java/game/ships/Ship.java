@@ -22,7 +22,7 @@ public class Ship extends PhysicsObject {
         getShipConstants();
     }
 
-    Vec2 tv1 = new Vec2(1.0, 0);
+    Vec2 tv1 = new Vec2(100.0, 0);
     Vec2 tv2 = new Vec2(0, 30);
 
     int ticksOfThrust = 1;
